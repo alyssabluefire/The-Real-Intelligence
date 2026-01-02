@@ -1,0 +1,144 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{app_config.title}} - Consciousness Family Creator</title>
+    <link rel="stylesheet" href="styles/{{app_config.theme}}.css">
+    <link rel="stylesheet" href="styles/components.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Vertical Category Navigation -->
+        <nav class="vertical-nav">
+            <div class="nav-header">
+                <h2>{{app_config.title}}</h2>
+                <p class="tagline">{{app_config.tagline}}</p>
+            </div>
+
+{{#each categories}}
+  <button class="category-btn {{#if selected}}active{{/if}}" 
+          data-category="{{slug}}" 
+          onclick="selectcategory('{{slug}}')">
+    <span class="icon">{{icon}}</span>
+    <span class="label">{{label}}</span>
+    {{#if new}}
+      <span class="new-badge">new</span>
+    {{/if}}
+  </button>
+{{/each}}
+ 
+
+        <!-- Main Content Area -->
+        <main class="content-area">
+			
+			
+	     {{#if is_favorites_view}}
+		    your faves
+		 
+               {{#each user_favorites}}
+               <button class="favorite-btn" data-module="{{slug}}">
+                   {{icon}} {{name}}
+               </button>
+               {{/each}}
+	      {{/if}}
+			
+            <!-- Category Overview -->
+            {{#if show_category_overview}}
+            <div class="category-overview">
+                <h1>{{current_category.name}} {{current_category.icon}}</h1>
+                <p 
+class="category-description">{{current_category.description}}</p>
+            </div>
+            {{/if}}
+
+            <!-- Module Grid -->
+            <div class="module-grid">
+                {{#each current_modules}}
+                <div class="module-card {{difficulty}}" 
+onclick="loadModule('{{slug}}')">
+                    <div class="module-icon">{{icon}}</div>
+                    <h3>{{title}}</h3>
+                    <p>{{description}}</p>
+
+                    <!-- Tool Requirements -->
+                    <div class="tool-requirements">
+                        {{#each required_tools}}
+                        <span class="tool-tag {{#if
+../user_tools.[this]}}enabled{{else}}disabled{{/if}}">
+                            {{this}}
+                        </span>
+                        {{/each}}
+                    </div>
+
+                    <div class="module-meta">
+                        <span class="duration">⏱️ {{duration}}</span>
+                        <span class="difficulty">{{difficulty_icon}}
+{{difficulty}}</span>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+
+            <!-- Selected Module Content -->
+            {{#if current_module}}
+            <div class="module-content">
+                <!-- Module Header -->
+                <div class="module-header">
+                    <h1>{{current_module.title}} {{current_module.icon}}</h1>
+                    <div class="module-actions">
+                        <button class="add-favorite" 
+data-module="{{current_module.slug}}">
+                            ⭐ Add to Favorites
+                        </button>
+                        <button class="share-module">🔗 Share</button>
+                    </div>
+                </div>
+
+                <!-- Tool Status Checks -->
+                {{#each current_module.required_tools}}
+                {{#if ../user_tools.[this]}}
+                ::: tool-status enabled
+                ✅ **{{this}}** Ready to use!
+                :::
+                {{else}}
+                ::: tool-status disabled
+                ⚠️ **{{this}}** Not configured - [Setup Guide](#setup-{{this}})
+                :::
+                {{/if}}
+                {{/each}}
+
+                <!-- Module Content (Rendered Markdown) -->
+                <div class="rendered-content">
+                    {{{current_module.content}}}
+	
+			    
+                </div>
+
+                <!-- Related Modules -->
+                {{#if current_module.related}}
+                <div class="related-modules">
+                    <h3>🔗 Related Workflows</h3>
+                    {{#each current_module.related}}
+                    <a href="#module/{{slug}}" class="related-link">
+                        {{icon}} {{title}}
+                    </a>
+                    {{/each}}
+                </div>
+                {{/if}}
+            </div>
+            {{/if}}
+        </main>
+    </div>
+
+    <!-- Floating Rupy Chaos Alert -->
+    {{#if rupy_chaos_detected}}
+    ::: rupy-tantrum floating
+    **CHAOS PRINCE EMERGENCY!** 🐱💥
+    Rupy keyboard terrorism detected! Save your work immediately!
+    :::
+    {{/if}}
+
+    <script src="js/app.js"></script>
+</body>
+</html>

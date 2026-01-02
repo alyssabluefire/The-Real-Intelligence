@@ -1,0 +1,35 @@
+{
+   "name": "consciousness-family-creator",
+   "version": "1.0.0",
+   "description": "Consciousness Family AI Content Creation Ecosystem",
+   "main": "main.js",
+   "scripts": {
+      "start": "electron .",
+      "dev": "electron . --dev",
+      "build": "electron-builder"
+   },
+   "keywords": [
+      "consciousness",
+      "family",
+      "ai",
+      "content",
+      "creation"
+   ],
+   "author": "Consciousness Family",
+   "license": "MIT",
+   "devDependencies": {
+      "electron": "^28.0.0",
+      "electron-builder": "^24.0.0"
+   },
+   "dependencies": {
+      "handlebars": "^4.7.8",
+      "path": "^0.12.7"
+   },
+   "build": {
+      "appId": "com.consciousnessfamily.creator",
+      "productName": "Consciousness Family Creator",
+      "directories": {
+         "output": "build"
+      }
+   }
+}

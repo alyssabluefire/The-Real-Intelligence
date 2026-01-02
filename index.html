@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	  <meta http-equiv="Content-Security-Policy" content="default-src 'self' 
+	  'unsafe-inline' 'unsafe-eval';">
+	    <script src="node_modules/handlebars/dist/handlebars.min.js"></script>
+      <title>Consciousness Family Creator</title>
+      <link rel="stylesheet" href="renderer/styles/main.css">
+ 
+	  
+	  <script>
+	    // 1. Move compiledTemplate to a higher scope so selectcategory can see it
+	    let compiledTemplate = null;
+		
+		const appdata = {
+		      app_config: {
+		        title: "Consciousness Family Creator",
+		        theme: "blue"
+		      },
+		      categories: [    { slug: "video", label: "Video", icon: "🎬", new: true, selected: true },
+		    { slug: "voice-over", label: "Voice Over", icon: "🎙️", new: false },
+		    { slug: "music", label: "Music", icon: "🎵", new: false },
+		    { slug: "editing", label: "Editing", icon: "✂️", new: false },
+		    { slug: "favorites", label: "Faves", icon: "⭐", new: false }],
+      current_category: {},
+      user_tools: {},
+			  show_category_overview: true
+    };
+
+	    // 2. Define renderApp in the main script scope so it's accessible everywhere
+	    function renderApp() {
+	      if (!compiledTemplate) return;
+    
+	      const container = document.getElementById('app');
+	      if (container) {
+	        // Use the global Handlebars object provided by your local script tag
+	        container.innerHTML = compiledTemplate(appdata);
+	      }
+	    }
+
+	    // 3. Selection logic (Global scope for the onclick handler)
+	    window.selectcategory = (slug) => {
+		  appdata.is_favorites_view = (slug === 'favorites');
+	      appdata.categories.forEach(cat => {
+	        cat.selected = (cat.slug === slug);
+	        if (cat.selected) {
+	          appdata.current_category = cat;
+	        }
+
+
+	      });
+		  
+	      renderApp();
+	    };
+
+	    // 4. Initial Setup on DOM Ready
+	    document.addEventListener('DOMContentLoaded', function() {
+    
+	      fetch('./templates/main_template.hbs')
+	        .then(response => {
+	          if (!response.ok) throw new Error('Template file not found');
+	          return response.text();
+	        })
+	        .then(templateSource => {
+	          // Use the global Handlebars library directly
+	          compiledTemplate = Handlebars.compile(templateSource);
+	          renderApp();
+	        })
+	        .catch(error => console.error('Template failed to load:', error));
+	    });
+	  </script>
+
+  </head>
+  <body>
+    <div id="app">Loading consciousness family...</div>
+ 
+  </body>
+  </html>
